@@ -30,3 +30,4 @@ services:
      - ljdb
     links:
      - ljdb
+   container_name: chatscrum
