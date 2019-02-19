@@ -16,13 +16,6 @@ node {
 //     sh 'docker build -t senaint/chatscrum:latest .'
 //  }
 
-    stage('push docker image') {
-     withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhub')]) {
-      sh "docker login -u senaint -p ${dockerhub}"
-    }
-    sh 'docker push senaint/chatscrum:latest'
-    }
-
     stage('Deploy'){
 
       sh 'docker-compose up -d'
