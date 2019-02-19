@@ -1,19 +1,30 @@
 node {
-    agent { dockerfile true } 
-
+    #agent { dockerfile true } 
+    stage('SCM checkout')
+      git-credentialsId: 'git-cred', url: 'https://github.com/senaint/practgit'
+   
     stage('Environment') {
       sh 'git --version'
       echo "Branch: ${env.BRANCH_NAME}"
       sh 'docker -v'
       sh 'printenv'
     }
+    
+    stage('build docker image') {
+      sh 'docker build -t senaint/chatscrum:latest .'
+    }
 
+    stage('build docker image') {
+     withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhub')]) {
+      sh "docker login -u senaint -p ${dockerhub}"
+    }
+    sh 'docker push senaint/chatscrum:latest'
+    
     stage('Deploy'){
-      if(env.BRANCH_NAME == 'master'){
-        sh 'docker build -t chatscrum --no-cache .'
-        sh 'docker tag chatscrum senaint/chatscrum'
-        sh 'docker-compose up -d'
-        sh 'docker exec -it chatscum /web/housekeeping.sh'
+
+        #sh 'docker-compose up -d'
+        sh 'docker run -d -name chatscrum senaint/chatscrum:latest'
+        sh 'docker exec -it senaint/chatscum:latest /web/housekeeping.sh'
 
       }
     }
