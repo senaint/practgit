@@ -1,5 +1,5 @@
 node {
-    #agent { dockerfile true } 
+ 
     stage('SCM checkout')
       git-credentialsId: 'git-cred', url: 'https://github.com/senaint/practgit'
    
