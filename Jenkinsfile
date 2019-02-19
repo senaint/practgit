@@ -26,7 +26,7 @@ node {
     stage('Deploy'){
 
 //      sh 'docker-compose up -d'
-        sh 'docker run -d -name chatscrum senaint/chatscrum:latest'
+        sh 'docker run -d senaint/chatscrum:latest'
         sh 'docker exec -it senaint/chatscum:latest /web/housekeeping.sh'
 
       }
