@@ -2,8 +2,9 @@
 node {
 
     stage('SCM checkout'){
-      git-credentialsId: 'git-cred', url: 'https://github.com/senaint/practgit'
+      git credentialsId: 'git-cred', url: 'https://github.com/senaint/practgit', branch: 'master'
     }
+
     stage('Environment') {
       sh 'git --version'
       echo "Branch: ${env.BRANCH_NAME}"
@@ -21,9 +22,10 @@ node {
     }
     sh 'docker push senaint/chatscrum:latest'
     }
+
     stage('Deploy'){
 
-        #sh 'docker-compose up -d'
+//      sh 'docker-compose up -d'
         sh 'docker run -d -name chatscrum senaint/chatscrum:latest'
         sh 'docker exec -it senaint/chatscum:latest /web/housekeeping.sh'
 
