@@ -1,6 +1,3 @@
-#Dockerfile basev3 (building on top of basev1)
-#FROM docker.io/showpopulous/chatscrum_img_base2:basev2
-#FROM docker.io/showpopulous/chatscrum_img_base3:basev3
 FROM docker.io/showpopulous/chatscrum_base4:latest
 ######################## HOLD ON  ##########################################
 # If all you need to do is to run chatscrum,
