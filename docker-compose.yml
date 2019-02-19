@@ -22,4 +22,4 @@ services:
             - ljdb
         links:
             - ljdb
-    container_name: chatscrum
+    container_name: web
