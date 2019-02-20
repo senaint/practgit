@@ -20,7 +20,7 @@ node {
 
     stage('post-Deploy'){
 
-      sh "docker exec \$(docker container ls | grep 'docker.io' | awk '{print $1}') housekeeping.sh"  
+      sh """\$(docker exec \$(docker container ls | grep 'docker.io' | awk '{print $1}') housekeeping.sh)"""  
 
       }
 
