@@ -12,17 +12,10 @@ node {
       sh 'printenv'
     }
 
-//  stage('build docker image') {
-//     sh 'docker build -t senaint/chatscrum:latest .'
-//  }
-
     stage('Deploy'){
 
       sh 'docker-compose up -d'
-      sh 'docker ps'
-//    sh 'docker run -d senaint/chatscrum:latest'
-//    sh 'docker exec -it senaint/chatscum:latest /web/housekeeping.sh'
-      
+      sh 'docker exec  $(docker container ls | grep 'docker.io' | awk '{print $1}') housekeeping.sh'  
 
       }
     }

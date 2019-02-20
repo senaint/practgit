@@ -42,6 +42,7 @@ COPY www/ /web/www/
 COPY nginx.conf /etc/nginx/
 COPY package.json /web
 COPY start.sh /start.sh
+COPY housekeeping.sh /housekeeping.sh
 COPY settings.py /web/www/Django/ScrumMaster/ScrumMaster/settings.py
 RUN chmod +x /start.sh
 
