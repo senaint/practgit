@@ -36,8 +36,6 @@ LABEL Vendor="CentOS" \
       License=GPLv2 \
       Version=2.4.6-40
 
-USER 1001:100
-
 RUN mkdir -p /web/
 COPY www/ /web/www/
 COPY nginx.conf /etc/nginx/
@@ -45,15 +43,13 @@ COPY package.json /web
 COPY start.sh /start.sh
 COPY housekeeping.sh /housekeeping.sh
 COPY settings.py /web/www/Django/ScrumMaster/ScrumMaster/settings.py
+RUN  chown -R 1001:0 /web && chmod -R ug+rwx /web
+USER 1001
 RUN chmod +x /start.sh
 
-RUN rm -rf /web/Chatscrum-Angular
-RUN yum install -y nodejs && yum install -y gcc-c++ make 
-RUN cd /web && npm install
-RUN git config --global user.email "joseph.showunmi@linuxjobber.com"
-RUN git config --global user.name "joseph.showunmi"
-RUN cd /web && . $HOME/.nvm/nvm.sh && ng new Chatscrum-Angular --routing
-RUN pip3.6 install Pillow channels_redis
+RUN rm -rf /web/Chatscrum-Angular && yum install -y nodejs && yum install -y gcc-c++ make && cd /web && npm install
+RUN git config --global user.email "joseph.showunmi@linuxjobber.com" && git config --global user.name "joseph.showunmi"
+RUN cd /web && . $HOME/.nvm/nvm.sh && ng new Chatscrum-Angular --routing && RUN pip3.6 install Pillow channels_redis
 
 RUN . $HOME/.nvm/nvm.sh && yes | cp -r /web/www/Angular/* /web/Chatscrum-Angular/src
 RUN cd /web/Chatscrum-Angular/ && sed -i '26s/.*/"src\/styles.css","node_modules\/materialize-css\/dist\/css\/materialize.min.css"/' angular.json; 
@@ -69,22 +65,14 @@ RUN yes | cp -r /web/Chatscrum-Angular/dist/Chatscrum-Angular/* /usr/share/nginx
 #RUN cd /web/www/Django/ScrumMaster/ && /bin/python3.6 manage.py runserver 0.0.0.0:5000
 
 RUN touch /etc/uwsgi.d/chatscrum.ini 
-RUN echo "[uwsgi]" > /etc/uwsgi.d/chatscrum.ini
-RUN echo "socket = /run/chatscrumuwsgi/uwsgi.sock" >> /etc/uwsgi.d/chatscrum.ini
-RUN echo "chmod-socket = 775" >> /etc/uwsgi.d/chatscrum.ini
-RUN echo "chdir = /web/www/Django/ScrumMaster" >> /etc/uwsgi.d/chatscrum.ini
-RUN echo "master = true" >> /etc/uwsgi.d/chatscrum.ini
-RUN echo "module = ScrumMaster.wsgi:application" >> /etc/uwsgi.d/chatscrum.ini
-RUN echo "uid = uwsgi" >> /etc/uwsgi.d/chatscrum.ini
-RUN echo "gid = uwsgi" >> /etc/uwsgi.d/chatscrum.ini
-RUN echo "processes = 1" >> /etc/uwsgi.d/chatscrum.ini
-RUN echo "threads = 1" >> /etc/uwsgi.d/chatscrum.ini
+RUN echo "[uwsgi]" > /etc/uwsgi.d/chatscrum.ini && echo "socket = /run/chatscrumuwsgi/uwsgi.sock" >> /etc/uwsgi.d/chatscrum.ini
+RUN echo "chmod-socket = 775" >> /etc/uwsgi.d/chatscrum.ini && echo "chdir = /web/www/Django/ScrumMaster" >> /etc/uwsgi.d/chatscrum.ini
+RUN echo "master = true" >> /etc/uwsgi.d/chatscrum.ini && echo "module = ScrumMaster.wsgi:application" >> /etc/uwsgi.d/chatscrum.ini
+RUN echo "uid = uwsgi" >> /etc/uwsgi.d/chatscrum.ini && RUN echo "gid = uwsgi" >> /etc/uwsgi.d/chatscrum.ini
+RUN echo "processes = 1" >> /etc/uwsgi.d/chatscrum.ini && echo "threads = 1" >> /etc/uwsgi.d/chatscrum.ini
 RUN echo "plugins = python36u,logfile" >> /etc/uwsgi.d/chatscrum.ini
 
-RUN mkdir -p /run/chatscrumuwsgi/
-RUN chgrp nginx /run/chatscrumuwsgi
-RUN chmod 2775 /run/chatscrumuwsgi
-RUN touch /run/chatscrumuwsgi/uwsgi.sock
+RUN mkdir -p /run/chatscrumuwsgi/ && chgrp nginx /run/chatscrumuwsgi && chmod 2775 /run/chatscrumuwsgi && touch /run/chatscrumuwsgi/uwsgi.sock
 
 #for basev2, container nginx should be running on port 5000 so that host nginx can run on 80
 EXPOSE 5000 5100
