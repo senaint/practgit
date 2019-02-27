@@ -43,9 +43,12 @@ COPY package.json /web
 COPY start.sh /start.sh
 COPY housekeeping.sh /housekeeping.sh
 COPY settings.py /web/www/Django/ScrumMaster/ScrumMaster/settings.py
+COPY ./s2i/bin/ $STI_SCRIPTS_PATH
+COPY ./root/ /
 RUN  chown -R 1001:0 /web && chmod -R ug+rwx /web
 USER 1001
 RUN chmod +x /start.sh
+
 
 RUN rm -rf /web/Chatscrum-Angular && yum install -y nodejs && yum install -y gcc-c++ make && cd /web && npm install
 RUN git config --global user.email "joseph.showunmi@linuxjobber.com" && git config --global user.name "joseph.showunmi"
