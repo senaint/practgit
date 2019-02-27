@@ -36,6 +36,7 @@ LABEL Vendor="CentOS" \
       License=GPLv2 \
       Version=2.4.6-40
 
+USER 1001:100
 
 RUN mkdir -p /web/
 COPY www/ /web/www/
