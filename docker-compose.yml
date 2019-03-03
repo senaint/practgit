@@ -7,7 +7,7 @@ services:
         environment:
             - MYSQL_ROOT_PASSWORD=root
             - MYSQL_USER=linuxjobber
-            - 'MYSQL_PASSWORD=8iu7*IU&'
+            - MYSQL_PASSWORD=8iu7*IU&
             - MYSQL_DATABASE=chatscrum
             - MYSQL_ALLOW_EMPTY_PASSWORDS=yes
             - MYSQL_ROOT_HOST=%
